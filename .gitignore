@@ -4,8 +4,6 @@
 # Environment variables
 .env
 
-# Compiled TypeScript files
-/dist
 
 # Logs
 npm-debug.log*
@@ -18,3 +16,4 @@ yarn-error.log*
 
 # Build artifacts
 /build/
+.vercel
