@@ -33,7 +33,6 @@ const uploadsFileController = async (
       path.extname(originalname),
       ".webp"
     );
-    console.log(`${envConfig.BASE_URL}${webpFilePath}`);
     const result = await new FileModels({
       originalname: webpOriginalName,
       filename: webpFileName,
