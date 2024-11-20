@@ -21,16 +21,16 @@ const uploadsFileController = async (req: Request, res: Response) => {
     let newFilePath = originalPath;
     //convert
     if (["image/png", "image/jpg", "image/jpeg"].includes(mimetype)) {
-      newFilePath = originalPath.replace(/\.[^/.]+$/, "") + ".webp";
+      newFilePath = originalPath.replace(/\.[^/.]+$/, " ") + ".webp";
       await sharp(originalPath).webp({ quality: 80 }).toFile(newFilePath);
       fs.unlinkSync(originalPath);
       file.path = newFilePath;
       file.mimetype = "image/webp";
-      file.filename = filename.replace(/\.[^/.]+$/, "") + ".webp";
+      file.filename = filename.replace(/\.[^/.]+$/, " ") + ".webp";
     }
     const modifyPath = file.path
       .toLowerCase()
-      .replace(" ", "-")
+      .replace(/\s+/g, "-")
       .replace(/\\/g, "/")
       .trim();
     const url = `${envConfig.BASE_URL}/${modifyPath}`;
@@ -47,7 +47,7 @@ const uploadsFileController = async (req: Request, res: Response) => {
     // Respond with the updated file details
     res.json({
       success: true,
-      message: "Image converted successfully",
+      message: "Image updated successfully",
       result,
     });
   } catch (error) {

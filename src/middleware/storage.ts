@@ -1,5 +1,4 @@
-import multer, { FileFilterCallback } from "multer";
-import path from "path";
+import multer from "multer";
 import fs from "fs";
 
 const storage = multer.diskStorage({
@@ -18,7 +17,7 @@ const storage = multer.diskStorage({
       null,
       new Date().toISOString().replace(/:/g, "-").toLowerCase().trim() +
         "-" +
-        file.originalname.toLowerCase().replace(" ", "-").trim()
+        file.originalname.toLowerCase().replace(/  +/g, "-").trim()
     );
   },
 });
