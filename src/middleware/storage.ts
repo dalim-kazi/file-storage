@@ -1,24 +1,46 @@
-import multer from "multer";
+import multer, { FileFilterCallback } from "multer";
 import path from "path";
 import fs from "fs";
 
-const UPLOAD_DIR = "/uploads";
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const destinationPath = req.query.folderName as string;
-    const uploadFolder = path.join(
-      UPLOAD_DIR,
-      file.mimetype.split("/")[0],
-      destinationPath
-    );
-    fs.mkdir(uploadFolder, { recursive: true }, (err) => {
-      cb(null, uploadFolder);
-    });
+    const folderName = req.query.folderName as string;
+    const destinationFolder = `uploads/${folderName.toLowerCase().trim()}`;
+    //check if the folder exist
+    if (!fs.existsSync(destinationFolder)) {
+      fs.mkdirSync(destinationFolder, { recursive: true });
+    }
+    cb(null, destinationFolder);
   },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
+
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      new Date().toISOString().replace(/:/g, "-").toLowerCase().trim() +
+        "-" +
+        file.originalname.toLowerCase().replace(" ", "-").trim()
+    );
   },
 });
 
-export const uploads = multer({ storage });
+// File Filter Configuration
+function fileFilter(
+  req: Express.Request,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback
+) {
+  const allowedTypes = [
+    "image/png",
+    "image/jpg",
+    "image/jpeg",
+    "image/webp",
+    "application/pdf",
+  ];
+  if (!allowedTypes.includes(file.mimetype)) {
+    return cb(null, false);
+  }
+  cb(null, true);
+}
+
+// Export Multer Instance
+export const uploads = multer({ storage, fileFilter });

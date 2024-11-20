@@ -3,7 +3,7 @@ import sharp from "sharp";
 export const convertImageToWebP = async ({
   imageBuffer,
   outputPath,
-  quality = 80,
+  quality = 100,
 }: {
   imageBuffer: Buffer;
   outputPath: string;

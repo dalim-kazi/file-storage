@@ -31,5 +31,5 @@ const fileSchema = new Schema({
   },
 });
 
-const FileModels = model("file-storage", fileSchema);
+const FileModels = model("storage", fileSchema);
 export default FileModels;
